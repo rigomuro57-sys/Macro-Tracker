@@ -7,7 +7,57 @@ const SKIP_DAYS = [16];            // Days to ignore
 const AUTO_DAY_NUMBER = true;      // Auto calculate day number
 const DEFAULT_GOALS = { calories:2700, protein:205, carbs:300, fat:75, satFat:16, fiber:30, solFiber:13 };
 const STORAGE = { goals:"macroGoalsV1", entries:"macroEntriesV1" };
+/* ===== ELITE AUTO MODE ===== */
+function calculateTotals(entries) {
 
+  return entries.reduce((total, item) => {
+
+    total.calories += Number(item.calories || 0);
+    total.protein += Number(item.protein || 0);
+    total.carbs += Number(item.carbs || 0);
+    total.fat += Number(item.fat || 0);
+    total.fiber += Number(item.fiber || 0);
+    total.solubleFiber += Number(item.solubleFiber || 0);
+    total.satFat += Number(item.satFat || 0);
+
+    return total;
+
+  }, {
+    calories:0,
+    protein:0,
+    carbs:0,
+    fat:0,
+    fiber:0,
+    solubleFiber:0,
+    satFat:0
+  });
+
+}
+function getDayNumber() {
+function autoEntryNumber(entriesToday) {
+
+  const meals = entriesToday.filter(e => e.type === "Meal").length;
+  const snacks = entriesToday.filter(e => e.type === "Snack").length;
+
+  return {
+    meal: meals + 1,
+    snack: snacks + 1
+  };
+}
+  if (!AUTO_DAY_NUMBER) return null;
+
+  const start = new Date(START_DATE);
+  const today = new Date();
+
+  let diff = Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
+
+  // subtract skipped days
+  SKIP_DAYS.forEach(d => {
+    if (d <= diff) diff--;
+  });
+
+  return diff;
+}
 function loadGoals(){ try{ return {...DEFAULT_GOALS, ...(JSON.parse(localStorage.getItem(STORAGE.goals))||{})}; }catch(e){ return {...DEFAULT_GOALS}; } }
 function saveGoals(goals){ localStorage.setItem(STORAGE.goals, JSON.stringify(goals)); }
 
