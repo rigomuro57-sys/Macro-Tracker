@@ -1,6 +1,10 @@
 /* ULTRA GOD MODE: offline-first PWA macro tracker (local-only) */
 const $ = (id)=>document.getElementById(id);
+/* ===== ULTRA GOD MODE SETTINGS ===== */
 
+const START_DATE = "2026-01-14";   // Day 1
+const SKIP_DAYS = [16];            // Days to ignore
+const AUTO_DAY_NUMBER = true;      // Auto calculate day number
 const DEFAULT_GOALS = { calories:2700, protein:205, carbs:300, fat:75, satFat:16, fiber:30, solFiber:13 };
 const STORAGE = { goals:"macroGoalsV1", entries:"macroEntriesV1" };
 
